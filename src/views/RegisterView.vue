@@ -235,6 +235,18 @@ onBeforeUnmount(() => {
 
     <!-- PANEL IZQUIERDO -->
     <section class="welcome-panel">
+      <!-- Decoración animada, sin interacción -->
+      <div class="music-background" aria-hidden="true">
+        <span class="music-note note-1">♪</span>
+        <span class="music-note note-2">♫</span>
+        <span class="music-note note-3">♬</span>
+        <span class="music-note note-4">♪</span>
+        <span class="music-note note-5">♫</span>
+        <span class="music-note note-6">♩</span>
+        <div class="music-wave wave-1"></div>
+        <div class="music-wave wave-2"></div>
+        <div class="music-wave wave-3"></div>
+      </div>
       <div class="welcome-content">
 
         <div class="welcome-logo">
@@ -433,6 +445,9 @@ onBeforeUnmount(() => {
 /* PANEL IZQUIERDO */
 
 .welcome-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -447,6 +462,8 @@ onBeforeUnmount(() => {
 }
 
 .welcome-content {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 600px;
 }
@@ -758,4 +775,77 @@ input:focus {
     font-size: 16px;
   }
 }
+
+/* NOTAS Y ONDAS MUSICALES ANIMADAS */
+.music-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.music-note {
+  position: absolute;
+  bottom: -12%;
+  color: #bfdbfe;
+  font-family: Georgia, serif;
+  line-height: 1;
+  opacity: 0;
+  text-shadow: 0 0 18px rgba(147, 197, 253, 0.55);
+  animation: float-note 16s linear infinite;
+}
+
+.note-1 { left: 8%; font-size: 46px; animation-delay: -2s; }
+.note-2 { left: 25%; font-size: 34px; animation-delay: -10s; animation-duration: 19s; }
+.note-3 { left: 45%; font-size: 50px; animation-delay: -6s; animation-duration: 21s; }
+.note-4 { left: 65%; font-size: 32px; animation-delay: -14s; animation-duration: 18s; }
+.note-5 { left: 82%; font-size: 42px; animation-delay: -8s; animation-duration: 23s; }
+.note-6 { left: 93%; font-size: 29px; animation-delay: -17s; animation-duration: 20s; }
+
+@keyframes float-note {
+  0% { transform: translate3d(0, 0, 0) rotate(-12deg); opacity: 0; }
+  15% { opacity: 0.28; }
+  75% { opacity: 0.22; }
+  100% { transform: translate3d(35px, -115vh, 0) rotate(15deg); opacity: 0; }
+}
+
+.music-wave {
+  position: absolute;
+  width: 110%;
+  height: 260px;
+  left: -5%;
+  bottom: -125px;
+  border: 2px solid rgba(147, 197, 253, 0.24);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+  animation: wave-breathe 8s ease-in-out infinite alternate;
+}
+
+.wave-2 {
+  bottom: -95px;
+  left: -12%;
+  width: 125%;
+  border-color: rgba(125, 211, 252, 0.17);
+  animation-delay: -3s;
+}
+
+.wave-3 {
+  bottom: -65px;
+  left: -20%;
+  width: 140%;
+  border-color: rgba(191, 219, 254, 0.12);
+  animation-delay: -5s;
+}
+
+@keyframes wave-breathe {
+  from { transform: translateX(-12px) rotate(-12deg) scaleY(0.92); }
+  to { transform: translateX(18px) rotate(-9deg) scaleY(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-note, .music-wave { animation: none; }
+  .music-note { opacity: 0.16; bottom: auto; top: 15%; }
+}
+
 </style>
