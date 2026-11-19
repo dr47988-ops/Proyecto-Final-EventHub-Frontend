@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { useRouter } from "vue-router";
@@ -210,7 +209,7 @@ onMounted(async () => {
         shape: "rectangular",
         text: "signup_with",
         logo_alignment: "left",
-        width: 390
+        width: Math.max(200, Math.min(390, window.innerWidth - 64))
       }
     );
 
@@ -301,47 +300,24 @@ onBeforeUnmount(() => {
 
           <div class="field">
             <label for="nombre">Nombre completo</label>
-            <input
-              id="nombre"
-              v-model="nombre"
-              type="text"
-              placeholder="Tu nombre completo"
-              autocomplete="name"
-              required
-            />
+            <input id="nombre" v-model="nombre" type="text" placeholder="Tu nombre completo" autocomplete="name"
+              required />
           </div>
 
           <div class="field">
             <label for="email">Correo electrónico</label>
-            <input
-              id="email"
-              v-model="email"
-              type="email"
-              placeholder="correo@ejemplo.com"
-              autocomplete="email"
-              required
-            />
+            <input id="email" v-model="email" type="email" placeholder="correo@ejemplo.com" autocomplete="email"
+              required />
           </div>
 
           <div class="field">
             <label for="password">Contraseña</label>
 
             <div class="password-wrapper">
-              <input
-                id="password"
-                v-model="password"
-                :type="mostrarPassword ? 'text' : 'password'"
-                placeholder="Mínimo 8 caracteres"
-                autocomplete="new-password"
-                minlength="8"
-                required
-              />
+              <input id="password" v-model="password" :type="mostrarPassword ? 'text' : 'password'"
+                placeholder="Mínimo 8 caracteres" autocomplete="new-password" minlength="8" required />
 
-              <button
-                type="button"
-                class="show-password"
-                @click="mostrarPassword = !mostrarPassword"
-              >
+              <button type="button" class="show-password" @click="mostrarPassword = !mostrarPassword">
                 {{ mostrarPassword ? "Ocultar" : "Mostrar" }}
               </button>
             </div>
@@ -353,46 +329,25 @@ onBeforeUnmount(() => {
             </label>
 
             <div class="password-wrapper">
-              <input
-                id="confirmarPassword"
-                v-model="confirmarPassword"
-                :type="mostrarConfirmacion ? 'text' : 'password'"
-                placeholder="Repite tu contraseña"
-                autocomplete="new-password"
-                required
-              />
+              <input id="confirmarPassword" v-model="confirmarPassword"
+                :type="mostrarConfirmacion ? 'text' : 'password'" placeholder="Repite tu contraseña"
+                autocomplete="new-password" required />
 
-              <button
-                type="button"
-                class="show-password"
-                @click="mostrarConfirmacion = !mostrarConfirmacion"
-              >
+              <button type="button" class="show-password" @click="mostrarConfirmacion = !mostrarConfirmacion">
                 {{ mostrarConfirmacion ? "Ocultar" : "Mostrar" }}
               </button>
             </div>
           </div>
 
-          <p
-            v-if="error"
-            class="error-message"
-            role="alert"
-          >
+          <p v-if="error" class="error-message" role="alert">
             {{ error }}
           </p>
 
-          <p
-            v-if="exito"
-            class="success-message"
-            role="status"
-          >
+          <p v-if="exito" class="success-message" role="status">
             {{ exito }}
           </p>
 
-          <button
-            type="submit"
-            class="register-button"
-            :disabled="cargando"
-          >
+          <button type="submit" class="register-button" :disabled="cargando">
             {{ cargando ? "Registrando..." : "Crear cuenta" }}
           </button>
 
@@ -406,10 +361,7 @@ onBeforeUnmount(() => {
           </div>
 
           <!-- BOTÓN OFICIAL DE GOOGLE -->
-          <div
-            ref="googleButton"
-            class="google-button-container"
-          ></div>
+          <div ref="googleButton" class="google-button-container"></div>
 
           <p v-if="cargandoGoogle" class="google-loading">
             Conectando con Google...
@@ -452,12 +404,10 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   padding: 70px;
-  background: linear-gradient(
-    145deg,
-    #0f172a,
-    #1e3a8a,
-    #2563eb
-  );
+  background: linear-gradient(145deg,
+      #0f172a,
+      #1e3a8a,
+      #2563eb);
   color: white;
 }
 
@@ -796,18 +746,65 @@ input:focus {
   animation: float-note 16s linear infinite;
 }
 
-.note-1 { left: 8%; font-size: 46px; animation-delay: -2s; }
-.note-2 { left: 25%; font-size: 34px; animation-delay: -10s; animation-duration: 19s; }
-.note-3 { left: 45%; font-size: 50px; animation-delay: -6s; animation-duration: 21s; }
-.note-4 { left: 65%; font-size: 32px; animation-delay: -14s; animation-duration: 18s; }
-.note-5 { left: 82%; font-size: 42px; animation-delay: -8s; animation-duration: 23s; }
-.note-6 { left: 93%; font-size: 29px; animation-delay: -17s; animation-duration: 20s; }
+.note-1 {
+  left: 8%;
+  font-size: 46px;
+  animation-delay: -2s;
+}
+
+.note-2 {
+  left: 25%;
+  font-size: 34px;
+  animation-delay: -10s;
+  animation-duration: 19s;
+}
+
+.note-3 {
+  left: 45%;
+  font-size: 50px;
+  animation-delay: -6s;
+  animation-duration: 21s;
+}
+
+.note-4 {
+  left: 65%;
+  font-size: 32px;
+  animation-delay: -14s;
+  animation-duration: 18s;
+}
+
+.note-5 {
+  left: 82%;
+  font-size: 42px;
+  animation-delay: -8s;
+  animation-duration: 23s;
+}
+
+.note-6 {
+  left: 93%;
+  font-size: 29px;
+  animation-delay: -17s;
+  animation-duration: 20s;
+}
 
 @keyframes float-note {
-  0% { transform: translate3d(0, 0, 0) rotate(-12deg); opacity: 0; }
-  15% { opacity: 0.28; }
-  75% { opacity: 0.22; }
-  100% { transform: translate3d(35px, -115vh, 0) rotate(15deg); opacity: 0; }
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-12deg);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.28;
+  }
+
+  75% {
+    opacity: 0.22;
+  }
+
+  100% {
+    transform: translate3d(35px, -115vh, 0) rotate(15deg);
+    opacity: 0;
+  }
 }
 
 .music-wave {
@@ -839,13 +836,189 @@ input:focus {
 }
 
 @keyframes wave-breathe {
-  from { transform: translateX(-12px) rotate(-12deg) scaleY(0.92); }
-  to { transform: translateX(18px) rotate(-9deg) scaleY(1.1); }
+  from {
+    transform: translateX(-12px) rotate(-12deg) scaleY(0.92);
+  }
+
+  to {
+    transform: translateX(18px) rotate(-9deg) scaleY(1.1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .music-note, .music-wave { animation: none; }
-  .music-note { opacity: 0.16; bottom: auto; top: 15%; }
+
+  .music-note,
+  .music-wave {
+    animation: none;
+  }
+
+  .music-note {
+    opacity: 0.16;
+    bottom: auto;
+    top: 15%;
+  }
 }
 
+
+/* AJUSTES RESPONSIVE: mantienen el diseño de escritorio */
+.register-page,
+.register-page * {
+  box-sizing: border-box;
+}
+
+.register-page {
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.welcome-panel,
+.register-panel,
+.welcome-content,
+.register-content,
+.field,
+.password-wrapper,
+.google-section {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.register-content form,
+.field input,
+.password-wrapper input,
+.register-button {
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .register-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+
+  .welcome-panel,
+  .register-panel {
+    width: 100%;
+    flex: none;
+  }
+
+  .register-panel {
+    background: #fff;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-panel {
+    padding: 24px 20px 26px;
+  }
+
+  .welcome-logo {
+    font-size: 25px;
+    margin-bottom: 12px;
+  }
+
+  .welcome-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin: 0 0 10px;
+  }
+
+  .welcome-content h1 {
+    font-size: clamp(23px, 7vw, 28px);
+    line-height: 1.18;
+    margin: 0 0 10px;
+  }
+
+  .welcome-description {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .register-panel {
+    padding: 28px 20px 38px;
+    align-items: stretch;
+  }
+
+  .register-content {
+    width: 100%;
+  }
+
+  .brand h2 {
+    font-size: 27px;
+  }
+
+  .brand-icon {
+    font-size: 26px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    margin: 8px 0 24px;
+  }
+
+  .register-content h3 {
+    font-size: 23px;
+    margin-bottom: 8px;
+  }
+
+  .description {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field label {
+    font-size: 14px;
+    margin-bottom: 7px;
+  }
+
+  .field input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 13px 14px;
+    font-size: 16px;
+  }
+
+  .password-wrapper input {
+    padding-right: 85px;
+  }
+
+  .show-password {
+    right: 12px;
+    font-size: 12px;
+  }
+
+  .register-button {
+    padding: 15px;
+    font-size: 16px;
+  }
+
+  .google-button-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .login-text {
+    font-size: 14px;
+  }
+
+  .music-wave {
+    height: 150px;
+    bottom: -90px;
+  }
+
+  .wave-2 {
+    bottom: -75px;
+  }
+
+  .wave-3 {
+    bottom: -60px;
+  }
+}
 </style>

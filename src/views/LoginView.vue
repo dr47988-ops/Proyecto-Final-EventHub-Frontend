@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { setSession } from "../services/authService";
@@ -193,7 +192,7 @@ onMounted(async () => {
         shape: "rectangular",
         text: "continue_with",
         logo_alignment: "left",
-        width: 390
+        width: Math.min(390, Math.floor(googleButton.value.getBoundingClientRect().width) || 390)
       }
     );
 
@@ -281,72 +280,39 @@ onBeforeUnmount(() => {
         <div class="field">
           <label for="email">Correo electrónico</label>
 
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            placeholder="correo@ejemplo.com"
-            autocomplete="email"
-            required
-          />
+          <input id="email" v-model="email" type="email" placeholder="correo@ejemplo.com" autocomplete="email"
+            required />
         </div>
 
         <div class="field">
           <label for="password">Contraseña</label>
 
           <div class="password-wrapper">
-            <input
-              id="password"
-              v-model="password"
-              :type="mostrarPassword ? 'text' : 'password'"
-              placeholder="Ingresa tu contraseña"
-              autocomplete="current-password"
-              required
-            />
+            <input id="password" v-model="password" :type="mostrarPassword ? 'text' : 'password'"
+              placeholder="Ingresa tu contraseña" autocomplete="current-password" required />
 
-            <button
-              type="button"
-              class="show-password"
-              :aria-label="
-                mostrarPassword
-                  ? 'Ocultar contraseña'
-                  : 'Mostrar contraseña'
-              "
-              @click="mostrarPassword = !mostrarPassword"
-            >
+            <button type="button" class="show-password" :aria-label="mostrarPassword
+                ? 'Ocultar contraseña'
+                : 'Mostrar contraseña'
+              " @click="mostrarPassword = !mostrarPassword">
               {{ mostrarPassword ? "Ocultar" : "Mostrar" }}
             </button>
           </div>
         </div>
 
-        <router-link
-          to="/forgot-password"
-          class="forgot"
-        >
+        <router-link to="/forgot-password" class="forgot">
           ¿Olvidaste tu contraseña?
         </router-link>
 
-        <p
-          v-if="error"
-          class="error-message"
-          role="alert"
-        >
+        <p v-if="error" class="error-message" role="alert">
           {{ error }}
         </p>
 
-        <p
-          v-if="exito"
-          class="success-message"
-          role="status"
-        >
+        <p v-if="exito" class="success-message" role="status">
           {{ exito }}
         </p>
 
-        <button
-          type="submit"
-          class="login-button"
-          :disabled="cargando || cargandoGoogle"
-        >
+        <button type="submit" class="login-button" :disabled="cargando || cargandoGoogle">
           {{ cargando ? "Iniciando sesión..." : "Iniciar sesión" }}
         </button>
 
@@ -358,22 +324,13 @@ onBeforeUnmount(() => {
 
       <div class="google-section">
 
-        <div
-          ref="googleButton"
-          class="google-button"
-        ></div>
+        <div ref="googleButton" class="google-button"></div>
 
-        <p
-          v-if="cargandoGoogle"
-          class="google-loading"
-        >
+        <p v-if="cargandoGoogle" class="google-loading">
           Iniciando sesión con Google...
         </p>
 
-        <p
-          v-else-if="!googleDisponible && !error"
-          class="google-loading"
-        >
+        <p v-else-if="!googleDisponible && !error" class="google-loading">
           Cargando Google...
         </p>
 
@@ -397,11 +354,29 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .login-page {
+  width: 100%;
+  min-width: 0;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   font-family: Arial, sans-serif;
   background: #ffffff;
+}
+
+/* Evita que padding y contenido fuercen desbordamiento horizontal */
+.login-page,
+.login-page * {
+  box-sizing: border-box;
+}
+
+.welcome-panel,
+.login-card,
+.welcome-content,
+.field,
+.password-wrapper,
+.google-section,
+.google-button {
+  min-width: 0;
 }
 
 /* PANEL IZQUIERDO */
@@ -436,18 +411,61 @@ onBeforeUnmount(() => {
   animation: float-note 15s linear infinite;
   will-change: transform, opacity;
 }
-.note-1 { left: 8%;  animation-delay: -2s;  animation-duration: 14s; }
-.note-2 { left: 23%; animation-delay: -10s; animation-duration: 18s; }
-.note-3 { left: 43%; animation-delay: -5s;  animation-duration: 16s; }
-.note-4 { left: 63%; animation-delay: -13s; animation-duration: 20s; }
-.note-5 { left: 79%; animation-delay: -7s;  animation-duration: 17s; }
-.note-6 { left: 92%; animation-delay: -16s; animation-duration: 19s; }
+
+.note-1 {
+  left: 8%;
+  animation-delay: -2s;
+  animation-duration: 14s;
+}
+
+.note-2 {
+  left: 23%;
+  animation-delay: -10s;
+  animation-duration: 18s;
+}
+
+.note-3 {
+  left: 43%;
+  animation-delay: -5s;
+  animation-duration: 16s;
+}
+
+.note-4 {
+  left: 63%;
+  animation-delay: -13s;
+  animation-duration: 20s;
+}
+
+.note-5 {
+  left: 79%;
+  animation-delay: -7s;
+  animation-duration: 17s;
+}
+
+.note-6 {
+  left: 92%;
+  animation-delay: -16s;
+  animation-duration: 19s;
+}
 
 @keyframes float-note {
-  0%   { transform: translate3d(0, 0, 0) rotate(-12deg); opacity: 0; }
-  12%  { opacity: 0.25; }
-  75%  { opacity: 0.22; }
-  100% { transform: translate3d(38px, -115vh, 0) rotate(16deg); opacity: 0; }
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-12deg);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.25;
+  }
+
+  75% {
+    opacity: 0.22;
+  }
+
+  100% {
+    transform: translate3d(38px, -115vh, 0) rotate(16deg);
+    opacity: 0;
+  }
 }
 
 .music-wave {
@@ -462,24 +480,42 @@ onBeforeUnmount(() => {
   transform: rotate(-12deg);
   animation: wave-glow 8s ease-in-out infinite alternate;
 }
+
 .wave-2 {
   bottom: -8%;
   border-color: rgba(191, 219, 254, 0.18);
   animation-delay: -2.5s;
 }
+
 .wave-3 {
   bottom: -2%;
   border-color: rgba(125, 211, 252, 0.13);
   animation-delay: -5s;
 }
+
 @keyframes wave-glow {
-  from { transform: translateX(-3%) rotate(-12deg) scaleY(0.9); opacity: 0.45; }
-  to   { transform: translateX(3%) rotate(-8deg) scaleY(1.12); opacity: 1; }
+  from {
+    transform: translateX(-3%) rotate(-12deg) scaleY(0.9);
+    opacity: 0.45;
+  }
+
+  to {
+    transform: translateX(3%) rotate(-8deg) scaleY(1.12);
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .music-note, .music-wave { animation: none; }
-  .music-note { opacity: 0.15; bottom: 20%; }
+
+  .music-note,
+  .music-wave {
+    animation: none;
+  }
+
+  .music-note {
+    opacity: 0.15;
+    bottom: 20%;
+  }
 }
 
 
@@ -711,6 +747,8 @@ input:focus {
   display: flex;
   justify-content: center;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .google-loading {
@@ -739,7 +777,7 @@ input:focus {
 /* TABLETAS Y CELULARES */
 @media (max-width: 900px) {
   .login-page {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .welcome-panel {
@@ -771,7 +809,28 @@ input:focus {
 
 @media (max-width: 480px) {
   .welcome-panel {
-    padding: 30px 22px;
+    padding: 24px 18px;
+  }
+
+  .welcome-logo {
+    font-size: 26px;
+    margin-bottom: 14px;
+  }
+
+  .welcome-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .welcome-description {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .music-note {
+    font-size: 28px;
   }
 
   .welcome-content h1 {
@@ -779,7 +838,52 @@ input:focus {
   }
 
   .login-card {
-    padding: 36px 22px;
+    width: 100%;
+    max-width: 100%;
+    padding: 28px 18px 36px;
+  }
+
+  .login-card form,
+  .login-card .field,
+  .password-wrapper,
+  .login-card input,
+  .login-button,
+  .google-section {
+    max-width: 100%;
+  }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  input {
+    font-size: 16px;
+    padding: 14px 15px;
+  }
+
+  .password-wrapper input {
+    padding-right: 88px;
+  }
+
+  .show-password {
+    right: 12px;
+    font-size: 13px;
+  }
+
+  .subtitle {
+    margin-bottom: 26px;
+  }
+
+  .description {
+    margin-bottom: 22px;
+  }
+
+  .separator {
+    margin: 24px 0 18px;
+  }
+
+  .register-text {
+    margin-top: 24px;
   }
 
   .brand h1 {
