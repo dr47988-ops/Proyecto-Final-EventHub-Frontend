@@ -42,7 +42,6 @@ const cerrarSesion = async () => {
 };
 </script>
 
-
 <template>
   <main class="dashboard-page">
 
@@ -71,13 +70,11 @@ const cerrarSesion = async () => {
     <!-- CONTENIDO PRINCIPAL -->
     <div class="dashboard-content">
 
-      <!-- BIENVENIDA -->
       <section class="welcome-section">
         <span class="section-label">PANEL PRINCIPAL</span>
 
         <h1>
-          ¡Bienvenido{{ usuario ? `, ${usuario.name}` : "" }}!
-          🎉
+          ¡Bienvenido{{ usuario ? `, ${usuario.name}` : "" }}! 🎉
         </h1>
 
         <p>
@@ -86,7 +83,6 @@ const cerrarSesion = async () => {
         </p>
       </section>
 
-      <!-- MENSAJE DE ERROR AL CERRAR SESIÓN -->
       <p
         v-if="errorLogout"
         class="logout-error"
@@ -95,36 +91,70 @@ const cerrarSesion = async () => {
         {{ errorLogout }}
       </p>
 
-      <!-- TARJETAS DE INFORMACIÓN -->
+      <!-- TARJETAS -->
       <section class="cards-grid">
 
         <!-- MI CUENTA -->
         <article class="info-card">
-          <div class="card-icon">👤</div>
-          <h2>Mi cuenta</h2>
+          <div class="card-heading">
+            <div class="card-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+              </svg>
+            </div>
+
+            <div>
+              <span class="card-label">PERFIL PERSONAL</span>
+              <h2>Mi cuenta</h2>
+            </div>
+          </div>
 
           <div class="info-row">
             <span>Nombre</span>
-            <strong>
-              {{ usuario?.name || "No disponible" }}
-            </strong>
+            <strong>{{ usuario?.name || "No disponible" }}</strong>
           </div>
 
           <div class="info-row">
             <span>Correo electrónico</span>
-            <strong>
-              {{ usuario?.email || "No disponible" }}
-            </strong>
+            <strong>{{ usuario?.email || "No disponible" }}</strong>
           </div>
         </article>
 
         <!-- INFORMACIÓN DE ACCESO -->
         <article class="info-card">
-          <div class="card-icon">🛡️</div>
-          <h2>Información de acceso</h2>
+          <div class="card-heading">
+            <div class="card-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"
+                />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+            </div>
+
+            <div>
+              <span class="card-label">SEGURIDAD</span>
+              <h2>Información de acceso</h2>
+            </div>
+          </div>
 
           <div class="info-row">
-            <span>Rol</span>
+            <span>Rol de usuario</span>
             <strong>{{ nombreRol }}</strong>
           </div>
 
@@ -132,11 +162,13 @@ const cerrarSesion = async () => {
             <span>Estado del correo</span>
 
             <strong
+              class="status"
               :class="usuario?.isEmailVerified ? 'verified' : 'pending'"
             >
+              <span class="status-dot"></span>
               {{
                 usuario?.isEmailVerified
-                  ? "✓ Verificado"
+                  ? "Verificado"
                   : "Pendiente de verificación"
               }}
             </strong>
@@ -144,12 +176,15 @@ const cerrarSesion = async () => {
         </article>
 
       </section>
-
     </div>
   </main>
 </template>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
 .dashboard-page {
   min-height: 100vh;
   background: #f3f6fc;
@@ -160,13 +195,12 @@ const cerrarSesion = async () => {
 /* BARRA SUPERIOR */
 .navbar {
   background: linear-gradient(110deg, #0f172a, #1e3a8a);
-  padding: 22px 36px;
+  padding: 20px 36px;
   color: white;
 }
 
 .navbar-content {
-  max-width: 1250px;
-  margin: auto;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -177,17 +211,21 @@ const cerrarSesion = async () => {
   font-size: 30px;
   font-weight: 700;
   color: white;
+  white-space: nowrap;
 }
 
 .navbar-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 22px;
+  margin-left: auto;
 }
 
 .navbar-user {
   font-size: 16px;
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
 .logout-button {
@@ -199,10 +237,13 @@ const cerrarSesion = async () => {
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.2s;
 }
 
 .logout-button:hover:not(:disabled) {
   background: #dbeafe;
+  transform: translateY(-2px);
 }
 
 .logout-button:disabled {
@@ -216,7 +257,6 @@ const cerrarSesion = async () => {
   max-width: 1250px;
   margin: 0 auto;
   padding: 60px 36px;
-  box-sizing: border-box;
 }
 
 .welcome-section {
@@ -225,15 +265,16 @@ const cerrarSesion = async () => {
 
 .section-label {
   color: #2563eb;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
 }
 
 .welcome-section h1 {
   font-size: clamp(30px, 3.5vw, 46px);
   color: #0f172a;
   margin: 18px 0;
+  letter-spacing: -0.7px;
 }
 
 .welcome-section p {
@@ -243,7 +284,7 @@ const cerrarSesion = async () => {
   max-width: 780px;
 }
 
-/* TARJETAS */
+/* TARJETAS MODERNAS */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -251,30 +292,68 @@ const cerrarSesion = async () => {
 }
 
 .info-card {
-  background: white;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 20px;
   padding: 34px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
   min-width: 0;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-6px);
+  border-color: #bfdbfe;
+  box-shadow: 0 20px 45px rgba(37, 99, 235, 0.12);
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 28px;
 }
 
 .card-icon {
-  font-size: 34px;
-  margin-bottom: 18px;
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  color: #2563eb;
+}
+
+.card-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.card-label {
+  display: block;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 7px;
 }
 
 .info-card h2 {
-  font-size: 23px;
-  margin: 0 0 26px;
+  font-size: 22px;
+  margin: 0;
   color: #0f172a;
 }
 
 .info-row {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  padding: 15px 0;
+  gap: 8px;
+  padding: 16px 0;
   border-bottom: 1px solid #e2e8f0;
 }
 
@@ -283,69 +362,62 @@ const cerrarSesion = async () => {
 }
 
 .info-row span {
-  font-size: 15px;
+  font-size: 14px;
   color: #64748b;
 }
 
 .info-row strong {
-  font-size: 17px;
+  font-size: 16px;
+  font-weight: 600;
   color: #0f172a;
   overflow-wrap: anywhere;
+}
+
+/* ESTADOS */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+}
+
+.status .status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .info-row .verified {
   color: #15803d;
 }
 
+.verified .status-dot {
+  background: #22c55e;
+}
+
 .info-row .pending {
   color: #b45309;
 }
 
-/* PRÓXIMAMENTE */
-.coming-soon {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  background: #e8f0ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 18px;
-  padding: 32px;
-  margin-top: 32px;
+.pending .status-dot {
+  background: #f59e0b;
 }
 
-.coming-icon {
-  font-size: 42px;
-}
-
-.coming-soon h2 {
-  color: #1e3a8a;
-  font-size: 22px;
-  margin: 0 0 10px;
-}
-
-.coming-soon p {
-  color: #475569;
-  font-size: 16px;
-  line-height: 1.6;
-  margin: 0;
-}
-
+/* ERRORES */
 .logout-error {
   color: #b91c1c;
   background: #fef2f2;
+  border: 1px solid #fecaca;
   padding: 14px;
   border-radius: 10px;
   margin-bottom: 24px;
 }
 
-/* RESPONSIVE */
+/* TABLETAS */
 @media (max-width: 768px) {
   .navbar {
     padding: 18px 20px;
-  }
-
-  .navbar-content {
-    flex-wrap: wrap;
   }
 
   .logo {
@@ -372,28 +444,52 @@ const cerrarSesion = async () => {
     padding: 26px;
   }
 
-  .coming-soon {
-    align-items: flex-start;
-    padding: 24px;
-  }
-
   .welcome-section p {
     font-size: 16px;
   }
 }
 
+/* CELULARES */
 @media (max-width: 480px) {
+  .navbar-content {
+    flex-wrap: wrap;
+  }
+
   .navbar-actions {
     width: 100%;
     justify-content: space-between;
+    margin-left: 0;
   }
 
   .logout-button {
     padding: 10px 14px;
+    font-size: 13px;
   }
 
-  .coming-soon {
-    flex-direction: column;
+  .card-heading {
+    gap: 14px;
+  }
+
+  .card-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .info-card h2 {
+    font-size: 19px;
+  }
+}
+
+/* ACCESIBILIDAD */
+@media (prefers-reduced-motion: reduce) {
+  .info-card,
+  .logout-button {
+    transition: none;
+  }
+
+  .info-card:hover,
+  .logout-button:hover {
+    transform: none;
   }
 }
 </style>

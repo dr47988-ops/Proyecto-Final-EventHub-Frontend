@@ -217,6 +217,18 @@ onBeforeUnmount(() => {
 
     <!-- PANEL IZQUIERDO: BIENVENIDA -->
     <section class="welcome-panel">
+      <!-- Decoración animada: no interfiere con los controles -->
+      <div class="music-background" aria-hidden="true">
+        <span class="music-note note-1">♪</span>
+        <span class="music-note note-2">♫</span>
+        <span class="music-note note-3">♬</span>
+        <span class="music-note note-4">♪</span>
+        <span class="music-note note-5">♫</span>
+        <span class="music-note note-6">♩</span>
+        <span class="music-wave wave-1"></span>
+        <span class="music-wave wave-2"></span>
+        <span class="music-wave wave-3"></span>
+      </div>
       <div class="welcome-content">
 
         <div class="welcome-logo">
@@ -394,6 +406,9 @@ onBeforeUnmount(() => {
 
 /* PANEL IZQUIERDO */
 .welcome-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -402,7 +417,75 @@ onBeforeUnmount(() => {
   background: linear-gradient(145deg, #0f172a, #1e3a8a, #2563eb);
 }
 
+/* Notas musicales y ondas luminosas animadas */
+.music-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.music-note {
+  position: absolute;
+  bottom: -15%;
+  font-size: clamp(28px, 4vw, 58px);
+  color: #bfdbfe;
+  opacity: 0;
+  text-shadow: 0 0 18px rgba(147, 197, 253, 0.65);
+  animation: float-note 15s linear infinite;
+  will-change: transform, opacity;
+}
+.note-1 { left: 8%;  animation-delay: -2s;  animation-duration: 14s; }
+.note-2 { left: 23%; animation-delay: -10s; animation-duration: 18s; }
+.note-3 { left: 43%; animation-delay: -5s;  animation-duration: 16s; }
+.note-4 { left: 63%; animation-delay: -13s; animation-duration: 20s; }
+.note-5 { left: 79%; animation-delay: -7s;  animation-duration: 17s; }
+.note-6 { left: 92%; animation-delay: -16s; animation-duration: 19s; }
+
+@keyframes float-note {
+  0%   { transform: translate3d(0, 0, 0) rotate(-12deg); opacity: 0; }
+  12%  { opacity: 0.25; }
+  75%  { opacity: 0.22; }
+  100% { transform: translate3d(38px, -115vh, 0) rotate(16deg); opacity: 0; }
+}
+
+.music-wave {
+  position: absolute;
+  width: 125%;
+  height: 32%;
+  left: -12%;
+  bottom: -14%;
+  border: 2px solid rgba(147, 197, 253, 0.26);
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(96, 165, 250, 0.15);
+  transform: rotate(-12deg);
+  animation: wave-glow 8s ease-in-out infinite alternate;
+}
+.wave-2 {
+  bottom: -8%;
+  border-color: rgba(191, 219, 254, 0.18);
+  animation-delay: -2.5s;
+}
+.wave-3 {
+  bottom: -2%;
+  border-color: rgba(125, 211, 252, 0.13);
+  animation-delay: -5s;
+}
+@keyframes wave-glow {
+  from { transform: translateX(-3%) rotate(-12deg) scaleY(0.9); opacity: 0.45; }
+  to   { transform: translateX(3%) rotate(-8deg) scaleY(1.12); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-note, .music-wave { animation: none; }
+  .music-note { opacity: 0.15; bottom: 20%; }
+}
+
+
 .welcome-content {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 600px;
 }
